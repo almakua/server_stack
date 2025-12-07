@@ -53,31 +53,13 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
 ./nginx/
 ├── nginx.conf              # Configurazione principale
 └── conf.d/
-    ├── qbittorrent.conf    # *.mbianchi.me (pubblico)
+    ├── qbittorrent.conf    # *.mbianchi.me
     ├── prowlarr.conf
     ├── sonarr.conf
     ├── radarr.conf
     ├── lidarr.conf
     ├── bazarr.conf
-    ├── jellyfin.conf
-    ├── local-qbittorrent.conf   # *.casa.home (LAN/Tailscale)
-    ├── local-prowlarr.conf
-    ├── local-sonarr.conf
-    ├── local-radarr.conf
-    ├── local-lidarr.conf
-    ├── local-bazarr.conf
-    └── local-jellyfin.conf
-```
-
-### Script
-```
-./scripts/
-├── renew-tailscale-certs.sh    # Rinnovo certificati Tailscale
-├── install-systemd.sh          # Installazione servizi systemd
-├── crontab                     # Configurazione crontab
-└── systemd/
-    ├── tailscale-cert-renewal.service
-    └── tailscale-cert-renewal.timer
+    └── jellyfin.conf
 ```
 
 ---
@@ -301,7 +283,7 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 
 ## 🌐 Reverse Proxy (Nginx)
 
-### URL Pubblici (mbianchi.me)
+### URL Servizi
 
 | Servizio | URL |
 |----------|-----|
@@ -312,20 +294,6 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 | Lidarr | `http://lidarr.mbianchi.me` |
 | Bazarr | `http://bazarr.mbianchi.me` |
 | Jellyfin | `http://jellyfin.mbianchi.me` |
-
-### URL Rete Locale / Tailscale (casa.home)
-
-| Servizio | URL |
-|----------|-----|
-| qBittorrent | `https://qbittorrent.casa.home` |
-| Prowlarr | `https://prowlarr.casa.home` |
-| Sonarr | `https://sonarr.casa.home` |
-| Radarr | `https://radarr.casa.home` |
-| Lidarr | `https://lidarr.casa.home` |
-| Bazarr | `https://bazarr.casa.home` |
-| Jellyfin | `https://jellyfin.casa.home` |
-
-> I domini `*.casa.home` supportano HTTPS tramite certificati Tailscale
 
 ### Configurazione DNS
 
@@ -397,127 +365,6 @@ docker compose exec nginx nginx -t
 # Ricarica configurazione senza downtime
 docker compose exec nginx nginx -s reload
 ```
-
----
-
-## 🔐 Certificati Tailscale (HTTPS per rete locale)
-
-I domini `*.casa.home` utilizzano certificati SSL generati tramite Tailscale per connessioni HTTPS sicure sulla rete locale.
-
-### Prerequisiti
-
-1. **Tailscale installato e connesso** sul server
-2. **HTTPS abilitato** nel pannello admin di Tailscale
-3. **MagicDNS** abilitato (opzionale ma consigliato)
-
-### Generazione Manuale dei Certificati
-
-```bash
-# Genera certificato per casa.home
-sudo tailscale cert casa.home
-
-# I certificati vengono salvati in:
-# - /var/lib/tailscale/certs/casa.home.crt
-# - /var/lib/tailscale/certs/casa.home.key
-```
-
-### Installazione Automatica (Systemd)
-
-Lo script di rinnovo automatico gestisce la generazione e il rinnovo dei certificati:
-
-```bash
-# Rendi eseguibile lo script di installazione
-chmod +x scripts/install-systemd.sh
-
-# Esegui l'installazione
-sudo ./scripts/install-systemd.sh
-```
-
-Questo installerà:
-- Script di rinnovo in `/opt/aragorn/scripts/`
-- Service unit per systemd
-- Timer che esegue il rinnovo il 1° di ogni mese alle 03:00
-
-### Comandi Utili
-
-```bash
-# Verifica stato del timer
-systemctl status tailscale-cert-renewal.timer
-
-# Visualizza prossima esecuzione schedulata
-systemctl list-timers tailscale-cert-renewal.timer
-
-# Esegui manualmente il rinnovo
-sudo systemctl start tailscale-cert-renewal.service
-
-# Forza rinnovo (ignora scadenza)
-sudo /opt/aragorn/scripts/renew-tailscale-certs.sh --force
-
-# Visualizza log systemd
-journalctl -u tailscale-cert-renewal.service -f
-
-# Visualizza log file
-tail -f /var/log/tailscale-cert-renewal.log
-
-# Disabilita rinnovo automatico
-sudo systemctl disable tailscale-cert-renewal.timer
-```
-
-### Installazione Alternativa (Crontab)
-
-Se preferisci usare crontab invece di systemd:
-
-```bash
-# Copia lo script nella posizione desiderata
-sudo mkdir -p /opt/aragorn/scripts
-sudo cp scripts/renew-tailscale-certs.sh /opt/aragorn/scripts/
-sudo chmod +x /opt/aragorn/scripts/renew-tailscale-certs.sh
-
-# Aggiungi al crontab di root
-sudo crontab -e
-
-# Aggiungi questa riga (esegue il 1° di ogni mese alle 03:00):
-0 3 1 * * /opt/aragorn/scripts/renew-tailscale-certs.sh >> /var/log/tailscale-cert-renewal.log 2>&1
-```
-
-### Configurazione Script
-
-Lo script può essere configurato tramite variabili d'ambiente:
-
-| Variabile | Default | Descrizione |
-|-----------|---------|-------------|
-| `TAILSCALE_DOMAIN` | `casa.home` | Dominio Tailscale |
-| `NGINX_SSL_DIR` | `/mnt/secondary/containers/nginx/ssl` | Directory certificati |
-| `COMPOSE_DIR` | `/home/$USER/aragorn` | Directory docker-compose |
-| `LOG_FILE` | `/var/log/tailscale-cert-renewal.log` | File di log |
-| `RENEWAL_DAYS` | `30` | Giorni prima della scadenza per rinnovo |
-
-Esempio di override:
-
-```bash
-sudo TAILSCALE_DOMAIN=myserver.tail12345.ts.net \
-     /opt/aragorn/scripts/renew-tailscale-certs.sh --force
-```
-
-### Configurazione DNS Locale
-
-Per usare i domini `*.casa.home` devi configurare il DNS locale (es. Pi-hole, dnsmasq, router):
-
-```
-# Esempio configurazione dnsmasq
-address=/casa.home/192.168.1.100
-
-# Oppure record individuali
-qbittorrent.casa.home  →  192.168.1.100
-prowlarr.casa.home     →  192.168.1.100
-sonarr.casa.home       →  192.168.1.100
-radarr.casa.home       →  192.168.1.100
-lidarr.casa.home       →  192.168.1.100
-bazarr.casa.home       →  192.168.1.100
-jellyfin.casa.home     →  192.168.1.100
-```
-
-Con **Tailscale MagicDNS**, i dispositivi nella tua tailnet risolveranno automaticamente i nomi `*.casa.home`
 
 ---
 

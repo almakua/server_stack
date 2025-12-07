@@ -8,12 +8,11 @@ Questa guida ti accompagna passo-passo nella configurazione completa del media s
 
 1. [Fase 1: Preparazione Server](#-fase-1-preparazione-server)
 2. [Fase 2: Preparazione Cartelle](#-fase-2-preparazione-cartelle)
-3. [Fase 3: Certificati Tailscale](#-fase-3-certificati-tailscale)
-4. [Fase 4: Firewall](#-fase-4-firewall)
-5. [Fase 5: Avvio Stack](#-fase-5-avvio-stack)
-6. [Fase 6: Configurazione Web](#-fase-6-configurazione-web-interfaces)
-7. [Verifica Finale](#-verifica-finale)
-8. [Checklist](#-checklist-finale)
+3. [Fase 3: Firewall](#-fase-3-firewall)
+4. [Fase 4: Avvio Stack](#-fase-4-avvio-stack)
+5. [Fase 5: Configurazione Web](#-fase-5-configurazione-web-interfaces)
+6. [Verifica Finale](#-verifica-finale)
+7. [Checklist](#-checklist-finale)
 
 ---
 
@@ -214,36 +213,7 @@ cd aragorn
 
 ---
 
-## 🔐 Fase 3: Certificati Tailscale
-
-### Installazione Tailscale
-
-```bash
-# Installa Tailscale
-curl -fsSL https://tailscale.com/install.sh | sh
-
-# Connetti alla rete Tailscale
-sudo tailscale up
-```
-
-### Setup Rinnovo Automatico Certificati
-
-```bash
-# Rendi eseguibili gli script
-chmod +x scripts/*.sh
-
-# Installa servizi systemd
-sudo ./scripts/install-systemd.sh
-
-# Genera certificati iniziali
-sudo /opt/aragorn/scripts/renew-tailscale-certs.sh --force
-```
-
-> 💡 I certificati verranno rinnovati automaticamente ogni mese
-
----
-
-## 🛡️ Fase 4: Firewall
+## 🛡️ Fase 3: Firewall
 
 ```bash
 # Configura regole firewall
@@ -266,7 +236,7 @@ sudo ufw status
 
 ---
 
-## 🚀 Fase 5: Avvio Stack
+## 🚀 Fase 4: Avvio Stack
 
 ### Avvio Container
 
@@ -316,25 +286,25 @@ docker compose logs -f sonarr
 
 ---
 
-## 🌐 Fase 6: Configurazione Web Interfaces
+## 🌐 Fase 5: Configurazione Web Interfaces
 
 ### Accesso ai Servizi
 
-| Servizio | URL Locale | URL Tailscale |
-|----------|------------|---------------|
-| qBittorrent | `http://IP_SERVER` | `https://qbittorrent.casa.home` |
-| Prowlarr | `http://IP_SERVER` | `https://prowlarr.casa.home` |
-| Sonarr | `http://IP_SERVER` | `https://sonarr.casa.home` |
-| Radarr | `http://IP_SERVER` | `https://radarr.casa.home` |
-| Lidarr | `http://IP_SERVER` | `https://lidarr.casa.home` |
-| Bazarr | `http://IP_SERVER` | `https://bazarr.casa.home` |
-| Jellyfin | `http://IP_SERVER` | `https://jellyfin.casa.home` |
+| Servizio | URL |
+|----------|-----|
+| qBittorrent | `http://qbittorrent.mbianchi.me` |
+| Prowlarr | `http://prowlarr.mbianchi.me` |
+| Sonarr | `http://sonarr.mbianchi.me` |
+| Radarr | `http://radarr.mbianchi.me` |
+| Lidarr | `http://lidarr.mbianchi.me` |
+| Bazarr | `http://bazarr.mbianchi.me` |
+| Jellyfin | `http://jellyfin.mbianchi.me` |
 
 ---
 
 ### 1️⃣ qBittorrent
 
-> 🔗 `https://qbittorrent.casa.home`
+> 🔗 `http://qbittorrent.mbianchi.me`
 
 | # | Azione |
 |---|--------|
@@ -351,7 +321,7 @@ docker compose logs -f sonarr
 
 ### 2️⃣ Prowlarr
 
-> 🔗 `https://prowlarr.casa.home`
+> 🔗 `http://prowlarr.mbianchi.me`
 
 | # | Azione |
 |---|--------|
@@ -366,7 +336,7 @@ docker compose logs -f sonarr
 
 ### 3️⃣ Sonarr (Serie TV)
 
-> 🔗 `https://sonarr.casa.home`
+> 🔗 `http://sonarr.mbianchi.me`
 
 | # | Azione |
 |---|--------|
@@ -394,7 +364,7 @@ docker compose logs -f sonarr
 
 ### 4️⃣ Radarr (Film)
 
-> 🔗 `https://radarr.casa.home`
+> 🔗 `http://radarr.mbianchi.me`
 
 | # | Azione |
 |---|--------|
@@ -422,7 +392,7 @@ docker compose logs -f sonarr
 
 ### 5️⃣ Lidarr (Musica)
 
-> 🔗 `https://lidarr.casa.home`
+> 🔗 `http://lidarr.mbianchi.me`
 
 | # | Azione |
 |---|--------|
@@ -450,7 +420,7 @@ docker compose logs -f sonarr
 
 ### 6️⃣ Bazarr (Sottotitoli)
 
-> 🔗 `https://bazarr.casa.home`
+> 🔗 `http://bazarr.mbianchi.me`
 
 | # | Azione |
 |---|--------|
@@ -479,7 +449,7 @@ docker compose logs -f sonarr
 
 ### 7️⃣ Jellyfin (Media Server)
 
-> 🔗 `https://jellyfin.casa.home`
+> 🔗 `http://jellyfin.mbianchi.me`
 
 | # | Azione |
 |---|--------|
@@ -533,20 +503,15 @@ docker compose exec nginx ping -c 2 jellyfin
 
 # 4. Verifica sync Prowlarr
 docker compose logs prowlarr | grep -i "sync\|app" | tail -10
-
-# 5. Verifica certificati Tailscale
-ls -la /mnt/secondary/containers/nginx/ssl/
 ```
 
 ### Test da Browser
 
-```bash
-# Apri questi URL e verifica che rispondano:
-https://qbittorrent.casa.home
-https://sonarr.casa.home
-https://radarr.casa.home
-https://jellyfin.casa.home
-```
+Apri questi URL e verifica che rispondano:
+- `http://qbittorrent.mbianchi.me`
+- `http://sonarr.mbianchi.me`
+- `http://radarr.mbianchi.me`
+- `http://jellyfin.mbianchi.me`
 
 ---
 
@@ -556,8 +521,7 @@ https://jellyfin.casa.home
 - [ ] Docker installato e funzionante
 - [ ] Docker Compose installato
 - [ ] NVIDIA toolkit installato (se GPU)
-- [ ] Tailscale connesso
-- [ ] Certificati SSL generati
+- [ ] DNS configurato per *.mbianchi.me
 - [ ] Firewall configurato
 - [ ] Tutti i container in stato "running"
 
