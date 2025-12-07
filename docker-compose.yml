@@ -119,6 +119,8 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Rome
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
     volumes:
       - /mnt/secondary/containers/jellyfin:/config
       - /mnt/main/movies:/data/movies
@@ -129,6 +131,14 @@ services:
       - 8920:8920 # HTTPS
       - 7359:7359/udp # Discovery
       - 1900:1900/udp # DLNA
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu, compute, video]
     restart: unless-stopped
 
   # ============================================

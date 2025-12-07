@@ -88,6 +88,7 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
 - Docker Compose v2+
 - Cartelle media già montate in `/mnt/main/`
 - DNS configurato per `*.mbianchi.me` che punti al server
+- **(Per transcodifica GPU)** NVIDIA Driver + NVIDIA Container Toolkit
 
 ### Verifica UID/GID
 
@@ -551,15 +552,42 @@ docker compose start qbittorrent
 docker logs qbittorrent 2>&1 | grep -i password
 ```
 
-### Jellyfin: transcodifica lenta
-Considera l'aggiunta dell'accelerazione hardware. Aggiungi al servizio jellyfin:
+### Jellyfin: accelerazione hardware NVIDIA
+
+Il docker-compose è già configurato per NVIDIA GPU. Prerequisiti sul sistema host:
+
+```bash
+# 1. Installa driver NVIDIA
+sudo apt install nvidia-driver-535  # o versione più recente
+
+# 2. Installa NVIDIA Container Toolkit
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+  sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+  sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+sudo apt update
+sudo apt install -y nvidia-container-toolkit
+
+# 3. Configura Docker per usare NVIDIA runtime
+sudo nvidia-ctk runtime configure --runtime=docker
+sudo systemctl restart docker
+
+# 4. Verifica che funzioni
+docker run --rm --gpus all nvidia/cuda:12.0-base nvidia-smi
+```
+
+In Jellyfin, vai in **Dashboard → Playback → Transcoding**:
+- Hardware acceleration: **NVIDIA NVENC**
+- Abilita: decoding e encoding per i codec supportati
+
+### Jellyfin: accelerazione hardware Intel (alternativa)
+
+Se hai una GPU Intel invece di NVIDIA, modifica il servizio jellyfin:
 ```yaml
-devices:
-  - /dev/dri:/dev/dri  # Intel QuickSync
-# oppure per NVIDIA:
-# runtime: nvidia
-# environment:
-#   - NVIDIA_VISIBLE_DEVICES=all
+jellyfin:
+  # rimuovi runtime: nvidia e la sezione deploy
+  devices:
+    - /dev/dri:/dev/dri  # Intel QuickSync
 ```
 
 ### Spazio su disco
