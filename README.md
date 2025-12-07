@@ -626,7 +626,7 @@ sudo nvidia-ctk runtime configure --runtime=docker
 sudo systemctl restart docker
 
 # 4. Verifica che funzioni
-docker run --rm --gpus all nvidia/cuda:12.0-base nvidia-smi
+docker run --rm --gpus all nvidia/cuda:12.0.0-base-ubuntu18.04 nvidia-smi
 ```
 
 In Jellyfin, vai in **Dashboard → Playback → Transcoding**:

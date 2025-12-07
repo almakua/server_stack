@@ -47,10 +47,40 @@ sudo apt install docker-compose-plugin -y
 docker compose version
 ```
 
-### Installazione NVIDIA Container Toolkit (Solo GPU NVIDIA)
+### Installazione Driver e Toolkit NVIDIA (Solo GPU NVIDIA)
 
 <details>
-<summary>📦 Clicca per espandere</summary>
+<summary>📦 Ubuntu 22.04 / 24.04 - Clicca per espandere</summary>
+
+#### Step 1: Installa driver NVIDIA
+
+```bash
+# Verifica che la GPU sia rilevata
+lspci | grep -i nvidia
+
+# Aggiungi repository driver
+sudo apt update
+sudo apt install -y software-properties-common
+sudo add-apt-repository -y ppa:graphics-drivers/ppa
+sudo apt update
+
+# Installa driver (automatico)
+sudo ubuntu-drivers autoinstall
+
+# OPPURE versione specifica
+sudo apt install -y nvidia-driver-535
+
+# Riavvia
+sudo reboot
+```
+
+#### Step 2: Verifica driver
+
+```bash
+nvidia-smi
+```
+
+#### Step 3: Installa NVIDIA Container Toolkit
 
 ```bash
 # Aggiungi repository NVIDIA
@@ -70,7 +100,81 @@ sudo nvidia-ctk runtime configure --runtime=docker
 sudo systemctl restart docker
 
 # Verifica funzionamento
-docker run --rm --gpus all nvidia/cuda:13.0.2-base-ubuntu24.04 nvidia-smi
+docker run --rm --gpus all nvidia/cuda:12.0.0-base-ubuntu18.04 nvidia-smi
+```
+
+</details>
+
+<details>
+<summary>📦 Debian 13 (Trixie) - Clicca per espandere</summary>
+
+#### Step 1: Abilita repository non-free
+
+```bash
+# Verifica che la GPU sia rilevata
+lspci | grep -i nvidia
+
+# Modifica sources.list
+sudo nano /etc/apt/sources.list
+```
+
+Assicurati che le righe contengano `non-free non-free-firmware`:
+
+```
+deb http://deb.debian.org/debian trixie main contrib non-free non-free-firmware
+deb http://deb.debian.org/debian trixie-updates main contrib non-free non-free-firmware
+deb http://security.debian.org/debian-security trixie-security main contrib non-free non-free-firmware
+```
+
+Salva ed esci (`Ctrl+O`, `Enter`, `Ctrl+X`)
+
+#### Step 2: Installa driver NVIDIA
+
+```bash
+# Installa dipendenze
+sudo apt update
+sudo apt install -y linux-headers-$(uname -r) build-essential dkms
+
+# Installa driver NVIDIA
+sudo apt install -y nvidia-driver firmware-misc-nonfree
+
+# Blacklist driver nouveau
+echo -e "blacklist nouveau\noptions nouveau modeset=0" | sudo tee /etc/modprobe.d/blacklist-nouveau.conf
+
+# Rigenera initramfs
+sudo update-initramfs -u
+
+# Riavvia
+sudo reboot
+```
+
+#### Step 3: Verifica driver
+
+```bash
+nvidia-smi
+```
+
+#### Step 4: Installa NVIDIA Container Toolkit
+
+```bash
+# Aggiungi repository NVIDIA
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | \
+  sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+
+curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+  sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+  sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+# Installa toolkit
+sudo apt update
+sudo apt install -y nvidia-container-toolkit
+
+# Configura Docker per NVIDIA
+sudo nvidia-ctk runtime configure --runtime=docker
+sudo systemctl restart docker
+
+# Verifica funzionamento
+docker run --rm --gpus all nvidia/cuda:12.0.0-base-ubuntu18.04 nvidia-smi
 ```
 
 </details>
