@@ -519,6 +519,57 @@ Con **Tailscale MagicDNS**, i dispositivi nella tua tailnet risolveranno automat
 
 ---
 
+## 🔒 Sicurezza
+
+### Architettura di rete
+
+```
+Internet → [Nginx :80/:443] → [Rete Docker isolata] → Servizi
+                                    ↑
+                              mediastack (172.20.0.0/16)
+```
+
+- **I servizi NON sono esposti direttamente** - accessibili solo via nginx
+- **Rete Docker dedicata** - i container comunicano solo tra loro
+- **Porte esposte minime**:
+  - `80/443` - Nginx (reverse proxy)
+  - `6881` - qBittorrent P2P (necessario per torrent)
+  - `7359/1900` - Jellyfin discovery/DLNA (opzionale, per app locali)
+
+### Protezioni Nginx
+
+| Protezione | Descrizione |
+|------------|-------------|
+| **Rate Limiting** | 30 req/s generale, 5 req/s per login |
+| **Connessioni simultanee** | Max 50-100 per IP |
+| **Security Headers** | X-Frame-Options, X-Content-Type-Options, XSS Protection |
+| **Blocco bot malevoli** | sqlmap, nikto, nmap, masscan |
+| **Server tokens nascosti** | Versione nginx non esposta |
+| **TLS moderno** | Solo TLSv1.2/1.3, cipher suite sicure |
+
+### Raccomandazioni aggiuntive
+
+```bash
+# 1. Firewall - blocca tutto tranne le porte necessarie
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow 22/tcp      # SSH
+sudo ufw allow 80/tcp      # HTTP
+sudo ufw allow 443/tcp     # HTTPS
+sudo ufw allow 6881/tcp    # qBittorrent
+sudo ufw allow 6881/udp
+sudo ufw enable
+
+# 2. Fail2ban per protezione brute force (opzionale)
+sudo apt install fail2ban
+```
+
+### HTTPS per domini pubblici
+
+Per `*.mbianchi.me` usa Let's Encrypt (vedi sezione dedicata nel README).
+
+---
+
 ## 🐛 Troubleshooting
 
 ### Permessi file
