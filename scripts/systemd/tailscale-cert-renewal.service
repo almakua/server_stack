@@ -1,0 +1,23 @@
+[Unit]
+Description=Tailscale Certificate Renewal for aragorn.alpaca-scala.ts.net
+Documentation=https://tailscale.com/kb/1153/enabling-https/
+After=network-online.target tailscaled.service docker.service
+Wants=network-online.target
+Requires=tailscaled.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/aragorn/scripts/renew-tailscale-certs.sh
+StandardOutput=journal
+StandardError=journal
+
+# Security hardening
+NoNewPrivileges=false
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/mnt/secondary/containers/nginx/ssl /var/log
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+

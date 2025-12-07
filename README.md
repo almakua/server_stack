@@ -62,6 +62,16 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
     └── jellyfin.conf
 ```
 
+### Script
+```
+./scripts/
+├── renew-tailscale-certs.sh    # Rinnovo certificato Tailscale
+├── install-systemd.sh          # Installazione servizi systemd
+└── systemd/
+    ├── tailscale-cert-renewal.service
+    └── tailscale-cert-renewal.timer
+```
+
 ---
 
 ## 🚀 Installazione
@@ -365,6 +375,55 @@ docker compose exec nginx nginx -t
 # Ricarica configurazione senza downtime
 docker compose exec nginx nginx -s reload
 ```
+
+---
+
+## 🔐 Certificato Tailscale (HTTPS)
+
+Il server è accessibile anche via Tailscale all'indirizzo `aragorn.alpaca-scala.ts.net` con certificato HTTPS automatico.
+
+### Installazione Rinnovo Automatico
+
+```bash
+# Rendi eseguibili gli script
+chmod +x scripts/*.sh
+
+# Installa i servizi systemd
+sudo ./scripts/install-systemd.sh
+
+# Genera il certificato iniziale
+sudo /opt/aragorn/scripts/renew-tailscale-certs.sh --force
+```
+
+### Comandi Utili
+
+```bash
+# Verifica stato del timer
+systemctl status tailscale-cert-renewal.timer
+
+# Visualizza prossima esecuzione
+systemctl list-timers tailscale-cert-renewal.timer
+
+# Rinnova manualmente
+sudo systemctl start tailscale-cert-renewal.service
+
+# Forza rinnovo
+sudo /opt/aragorn/scripts/renew-tailscale-certs.sh --force
+
+# Visualizza log
+journalctl -u tailscale-cert-renewal.service
+```
+
+### File Certificato
+
+I certificati vengono salvati in:
+```
+/mnt/secondary/containers/nginx/ssl/
+├── aragorn.alpaca-scala.ts.net.crt
+└── aragorn.alpaca-scala.ts.net.key
+```
+
+Il timer esegue il rinnovo il **1° di ogni mese alle 03:00**.
 
 ---
 

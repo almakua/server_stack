@@ -9,10 +9,11 @@ Questa guida ti accompagna passo-passo nella configurazione completa del media s
 1. [Fase 1: Preparazione Server](#-fase-1-preparazione-server)
 2. [Fase 2: Preparazione Cartelle](#-fase-2-preparazione-cartelle)
 3. [Fase 3: Firewall](#-fase-3-firewall)
-4. [Fase 4: Avvio Stack](#-fase-4-avvio-stack)
-5. [Fase 5: Configurazione Web](#-fase-5-configurazione-web-interfaces)
-6. [Verifica Finale](#-verifica-finale)
-7. [Checklist](#-checklist-finale)
+4. [Fase 4: Certificato Tailscale](#-fase-4-certificato-tailscale)
+5. [Fase 5: Avvio Stack](#-fase-5-avvio-stack)
+6. [Fase 6: Configurazione Web](#-fase-6-configurazione-web-interfaces)
+7. [Verifica Finale](#-verifica-finale)
+8. [Checklist](#-checklist-finale)
 
 ---
 
@@ -236,7 +237,51 @@ sudo ufw status
 
 ---
 
-## 🚀 Fase 4: Avvio Stack
+## 🔐 Fase 4: Certificato Tailscale
+
+Il server è accessibile via Tailscale all'indirizzo `aragorn.alpaca-scala.ts.net`.
+
+### Installazione Tailscale
+
+```bash
+# Installa Tailscale (se non già installato)
+curl -fsSL https://tailscale.com/install.sh | sh
+
+# Connetti alla rete Tailscale
+sudo tailscale up
+```
+
+### Setup Rinnovo Automatico Certificato
+
+```bash
+cd ~/aragorn
+
+# Rendi eseguibili gli script
+chmod +x scripts/*.sh
+
+# Installa servizi systemd
+sudo ./scripts/install-systemd.sh
+
+# Genera certificato iniziale
+sudo /opt/aragorn/scripts/renew-tailscale-certs.sh --force
+```
+
+> 💡 Il certificato verrà rinnovato automaticamente il 1° di ogni mese
+
+### Verifica
+
+```bash
+# Controlla che il certificato sia stato generato
+ls -la /mnt/secondary/containers/nginx/ssl/
+
+# Output atteso:
+# aragorn.alpaca-scala.ts.net.crt
+# aragorn.alpaca-scala.ts.net.key
+```
+
+---
+
+## 🚀 Fase 5: Avvio Stack
 
 ### Avvio Container
 
@@ -286,7 +331,7 @@ docker compose logs -f sonarr
 
 ---
 
-## 🌐 Fase 5: Configurazione Web Interfaces
+## 🌐 Fase 6: Configurazione Web Interfaces
 
 ### Accesso ai Servizi
 
@@ -522,6 +567,8 @@ Apri questi URL e verifica che rispondano:
 - [ ] Docker Compose installato
 - [ ] NVIDIA toolkit installato (se GPU)
 - [ ] DNS configurato per *.mbianchi.me
+- [ ] Tailscale connesso
+- [ ] Certificato Tailscale generato
 - [ ] Firewall configurato
 - [ ] Tutti i container in stato "running"
 
