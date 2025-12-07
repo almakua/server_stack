@@ -298,13 +298,15 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 
 | Servizio | URL |
 |----------|-----|
-| qBittorrent | `http://qbittorrent.mbianchi.me` |
-| Prowlarr | `http://prowlarr.mbianchi.me` |
-| Sonarr | `http://sonarr.mbianchi.me` |
-| Radarr | `http://radarr.mbianchi.me` |
-| Lidarr | `http://lidarr.mbianchi.me` |
-| Bazarr | `http://bazarr.mbianchi.me` |
-| Jellyfin | `http://jellyfin.mbianchi.me` |
+| qBittorrent | `https://qbittorrent.mbianchi.me` |
+| Prowlarr | `https://prowlarr.mbianchi.me` |
+| Sonarr | `https://sonarr.mbianchi.me` |
+| Radarr | `https://radarr.mbianchi.me` |
+| Lidarr | `https://lidarr.mbianchi.me` |
+| Bazarr | `https://bazarr.mbianchi.me` |
+| Jellyfin | `https://jellyfin.mbianchi.me` |
+
+> HTTP viene automaticamente reindirizzato a HTTPS
 
 ### Configurazione DNS
 

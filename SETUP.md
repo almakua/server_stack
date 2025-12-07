@@ -366,19 +366,21 @@ docker compose logs -f sonarr
 
 | Servizio | URL |
 |----------|-----|
-| qBittorrent | `http://qbittorrent.mbianchi.me` |
-| Prowlarr | `http://prowlarr.mbianchi.me` |
-| Sonarr | `http://sonarr.mbianchi.me` |
-| Radarr | `http://radarr.mbianchi.me` |
-| Lidarr | `http://lidarr.mbianchi.me` |
-| Bazarr | `http://bazarr.mbianchi.me` |
-| Jellyfin | `http://jellyfin.mbianchi.me` |
+| qBittorrent | `https://qbittorrent.mbianchi.me` |
+| Prowlarr | `https://prowlarr.mbianchi.me` |
+| Sonarr | `https://sonarr.mbianchi.me` |
+| Radarr | `https://radarr.mbianchi.me` |
+| Lidarr | `https://lidarr.mbianchi.me` |
+| Bazarr | `https://bazarr.mbianchi.me` |
+| Jellyfin | `https://jellyfin.mbianchi.me` |
+
+> HTTP viene automaticamente reindirizzato a HTTPS
 
 ---
 
 ### 1️⃣ qBittorrent
 
-> 🔗 `http://qbittorrent.mbianchi.me`
+> 🔗 `https://qbittorrent.mbianchi.me`
 
 | # | Azione |
 |---|--------|
@@ -395,7 +397,7 @@ docker compose logs -f sonarr
 
 ### 2️⃣ Prowlarr
 
-> 🔗 `http://prowlarr.mbianchi.me`
+> 🔗 `https://prowlarr.mbianchi.me`
 
 | # | Azione |
 |---|--------|
@@ -410,7 +412,7 @@ docker compose logs -f sonarr
 
 ### 3️⃣ Sonarr (Serie TV)
 
-> 🔗 `http://sonarr.mbianchi.me`
+> 🔗 `https://sonarr.mbianchi.me`
 
 | # | Azione |
 |---|--------|
@@ -438,7 +440,7 @@ docker compose logs -f sonarr
 
 ### 4️⃣ Radarr (Film)
 
-> 🔗 `http://radarr.mbianchi.me`
+> 🔗 `https://radarr.mbianchi.me`
 
 | # | Azione |
 |---|--------|
@@ -466,7 +468,7 @@ docker compose logs -f sonarr
 
 ### 5️⃣ Lidarr (Musica)
 
-> 🔗 `http://lidarr.mbianchi.me`
+> 🔗 `https://lidarr.mbianchi.me`
 
 | # | Azione |
 |---|--------|
@@ -494,7 +496,7 @@ docker compose logs -f sonarr
 
 ### 6️⃣ Bazarr (Sottotitoli)
 
-> 🔗 `http://bazarr.mbianchi.me`
+> 🔗 `https://bazarr.mbianchi.me`
 
 | # | Azione |
 |---|--------|
@@ -523,7 +525,7 @@ docker compose logs -f sonarr
 
 ### 7️⃣ Jellyfin (Media Server)
 
-> 🔗 `http://jellyfin.mbianchi.me`
+> 🔗 `https://jellyfin.mbianchi.me`
 
 | # | Azione |
 |---|--------|
@@ -581,11 +583,11 @@ docker compose logs prowlarr | grep -i "sync\|app" | tail -10
 
 ### Test da Browser
 
-Apri questi URL e verifica che rispondano:
-- `http://qbittorrent.mbianchi.me`
-- `http://sonarr.mbianchi.me`
-- `http://radarr.mbianchi.me`
-- `http://jellyfin.mbianchi.me`
+Apri questi URL e verifica che rispondano con HTTPS:
+- `https://qbittorrent.mbianchi.me`
+- `https://sonarr.mbianchi.me`
+- `https://radarr.mbianchi.me`
+- `https://jellyfin.mbianchi.me`
 
 ---
 
