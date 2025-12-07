@@ -65,11 +65,12 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
 ### Script
 ```
 ./scripts/
-├── renew-tailscale-certs.sh    # Rinnovo certificato Tailscale
+├── renew-certs.sh              # Rinnovo certificati (Tailscale + Let's Encrypt)
 ├── install-systemd.sh          # Installazione servizi systemd
+├── cloudflare.ini.example      # Template credenziali Cloudflare
 └── systemd/
-    ├── tailscale-cert-renewal.service
-    └── tailscale-cert-renewal.timer
+    ├── cert-renewal.service
+    └── cert-renewal.timer
 ```
 
 ---
@@ -378,9 +379,40 @@ docker compose exec nginx nginx -s reload
 
 ---
 
-## 🔐 Certificato Tailscale (HTTPS)
+## 🔐 Certificati SSL (HTTPS)
 
-Il server è accessibile anche via Tailscale all'indirizzo `aragorn.alpaca-scala.ts.net` con certificato HTTPS automatico.
+Lo stack gestisce automaticamente due tipi di certificati:
+
+| Tipo | Dominio | Provider |
+|------|---------|----------|
+| Tailscale | `aragorn.alpaca-scala.ts.net` | Tailscale |
+| Wildcard | `*.mbianchi.me` | Let's Encrypt (Cloudflare DNS) |
+
+### Prerequisiti
+
+```bash
+# Certbot con plugin Cloudflare (installato automaticamente dallo script)
+sudo apt install certbot python3-certbot-dns-cloudflare
+```
+
+### Configurazione Cloudflare
+
+1. Vai su [Cloudflare Dashboard](https://dash.cloudflare.com/profile/api-tokens)
+2. Crea un **API Token** con permessi:
+   - `Zone:DNS:Edit` per la zona `mbianchi.me`
+3. Configura le credenziali:
+
+```bash
+# Copia il template
+sudo cp /etc/letsencrypt/cloudflare.ini.example /etc/letsencrypt/cloudflare.ini
+
+# Modifica con il tuo token
+sudo nano /etc/letsencrypt/cloudflare.ini
+# Inserisci: dns_cloudflare_api_token = IL_TUO_TOKEN
+
+# Imposta permessi restrittivi
+sudo chmod 600 /etc/letsencrypt/cloudflare.ini
+```
 
 ### Installazione Rinnovo Automatico
 
@@ -391,39 +423,48 @@ chmod +x scripts/*.sh
 # Installa i servizi systemd
 sudo ./scripts/install-systemd.sh
 
-# Genera il certificato iniziale
-sudo /opt/aragorn/scripts/renew-tailscale-certs.sh --force
+# Genera i certificati iniziali
+sudo /opt/aragorn/scripts/renew-certs.sh --force
 ```
 
 ### Comandi Utili
 
 ```bash
 # Verifica stato del timer
-systemctl status tailscale-cert-renewal.timer
+systemctl status cert-renewal.timer
 
-# Visualizza prossima esecuzione
-systemctl list-timers tailscale-cert-renewal.timer
+# Visualizza prossime esecuzioni
+systemctl list-timers cert-renewal.timer
 
-# Rinnova manualmente
-sudo systemctl start tailscale-cert-renewal.service
+# Rinnova tutti i certificati
+sudo systemctl start cert-renewal.service
 
 # Forza rinnovo
-sudo /opt/aragorn/scripts/renew-tailscale-certs.sh --force
+sudo /opt/aragorn/scripts/renew-certs.sh --force
+
+# Solo Tailscale
+sudo /opt/aragorn/scripts/renew-certs.sh --tailscale-only --force
+
+# Solo Let's Encrypt
+sudo /opt/aragorn/scripts/renew-certs.sh --letsencrypt-only --force
 
 # Visualizza log
-journalctl -u tailscale-cert-renewal.service
+journalctl -u cert-renewal.service
+cat /var/log/cert-renewal.log
 ```
 
-### File Certificato
+### File Certificati
 
 I certificati vengono salvati in:
 ```
 /mnt/secondary/containers/nginx/ssl/
-├── aragorn.alpaca-scala.ts.net.crt
-└── aragorn.alpaca-scala.ts.net.key
+├── aragorn.alpaca-scala.ts.net.crt   # Tailscale
+├── aragorn.alpaca-scala.ts.net.key
+├── mbianchi.me.crt                    # Let's Encrypt wildcard
+└── mbianchi.me.key
 ```
 
-Il timer esegue il rinnovo il **1° di ogni mese alle 03:00**.
+Il timer esegue il rinnovo il **1° e 15° di ogni mese alle 03:00**.
 
 ---
 

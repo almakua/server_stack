@@ -1,13 +1,13 @@
 [Unit]
-Description=Tailscale Certificate Renewal for aragorn.alpaca-scala.ts.net
+Description=SSL Certificate Renewal (Tailscale + Let's Encrypt)
 Documentation=https://tailscale.com/kb/1153/enabling-https/
+Documentation=https://certbot.eff.org/
 After=network-online.target tailscaled.service docker.service
 Wants=network-online.target
-Requires=tailscaled.service
 
 [Service]
 Type=oneshot
-ExecStart=/opt/aragorn/scripts/renew-tailscale-certs.sh
+ExecStart=/opt/aragorn/scripts/renew-certs.sh
 StandardOutput=journal
 StandardError=journal
 
@@ -15,7 +15,7 @@ StandardError=journal
 NoNewPrivileges=false
 ProtectSystem=strict
 ProtectHome=read-only
-ReadWritePaths=/mnt/secondary/containers/nginx/ssl /var/log
+ReadWritePaths=/mnt/secondary/containers/nginx/ssl /var/log /etc/letsencrypt
 PrivateTmp=true
 
 [Install]

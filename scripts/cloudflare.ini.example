@@ -1,0 +1,25 @@
+# Cloudflare API credentials for Certbot DNS challenge
+#
+# Opzione 1: API Token (RACCOMANDATO)
+# Crea un token su: https://dash.cloudflare.com/profile/api-tokens
+# Permessi richiesti: Zone:DNS:Edit per la zona mbianchi.me
+#
+dns_cloudflare_api_token = YOUR_CLOUDFLARE_API_TOKEN
+
+# Opzione 2: Global API Key (meno sicuro)
+# dns_cloudflare_email = your-email@example.com
+# dns_cloudflare_api_key = YOUR_GLOBAL_API_KEY
+
+#
+# INSTALLAZIONE:
+#
+# 1. Copia questo file:
+#    sudo cp cloudflare.ini.example /etc/letsencrypt/cloudflare.ini
+#
+# 2. Modifica con il tuo token:
+#    sudo nano /etc/letsencrypt/cloudflare.ini
+#
+# 3. Imposta permessi restrittivi:
+#    sudo chmod 600 /etc/letsencrypt/cloudflare.ini
+#
+

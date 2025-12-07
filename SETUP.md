@@ -237,11 +237,13 @@ sudo ufw status
 
 ---
 
-## 🔐 Fase 4: Certificato Tailscale
+## 🔐 Fase 4: Certificati SSL
 
-Il server è accessibile via Tailscale all'indirizzo `aragorn.alpaca-scala.ts.net`.
+Lo stack usa due certificati:
+- **Tailscale**: `aragorn.alpaca-scala.ts.net`
+- **Let's Encrypt**: `*.mbianchi.me` (wildcard via Cloudflare DNS)
 
-### Installazione Tailscale
+### 4.1 Installazione Tailscale
 
 ```bash
 # Installa Tailscale (se non già installato)
@@ -251,7 +253,32 @@ curl -fsSL https://tailscale.com/install.sh | sh
 sudo tailscale up
 ```
 
-### Setup Rinnovo Automatico Certificato
+### 4.2 Configurazione Cloudflare API
+
+1. Vai su [Cloudflare API Tokens](https://dash.cloudflare.com/profile/api-tokens)
+2. Clicca **Create Token**
+3. Usa template **Edit zone DNS** oppure crea custom con:
+   - Permissions: `Zone > DNS > Edit`
+   - Zone Resources: `Include > Specific zone > mbianchi.me`
+4. Copia il token generato
+
+```bash
+# Crea file credenziali
+sudo mkdir -p /etc/letsencrypt
+sudo nano /etc/letsencrypt/cloudflare.ini
+```
+
+Inserisci:
+```ini
+dns_cloudflare_api_token = IL_TUO_TOKEN_QUI
+```
+
+```bash
+# Imposta permessi sicuri
+sudo chmod 600 /etc/letsencrypt/cloudflare.ini
+```
+
+### 4.3 Installazione Rinnovo Automatico
 
 ```bash
 cd ~/aragorn
@@ -259,24 +286,26 @@ cd ~/aragorn
 # Rendi eseguibili gli script
 chmod +x scripts/*.sh
 
-# Installa servizi systemd
+# Installa servizi systemd (installa anche certbot se mancante)
 sudo ./scripts/install-systemd.sh
 
-# Genera certificato iniziale
-sudo /opt/aragorn/scripts/renew-tailscale-certs.sh --force
+# Genera tutti i certificati
+sudo /opt/aragorn/scripts/renew-certs.sh --force
 ```
 
-> 💡 Il certificato verrà rinnovato automaticamente il 1° di ogni mese
+> 💡 I certificati verranno rinnovati automaticamente il 1° e 15° di ogni mese
 
-### Verifica
+### 4.4 Verifica
 
 ```bash
-# Controlla che il certificato sia stato generato
+# Controlla che i certificati siano stati generati
 ls -la /mnt/secondary/containers/nginx/ssl/
 
 # Output atteso:
 # aragorn.alpaca-scala.ts.net.crt
 # aragorn.alpaca-scala.ts.net.key
+# mbianchi.me.crt
+# mbianchi.me.key
 ```
 
 ---
@@ -568,7 +597,8 @@ Apri questi URL e verifica che rispondano:
 - [ ] NVIDIA toolkit installato (se GPU)
 - [ ] DNS configurato per *.mbianchi.me
 - [ ] Tailscale connesso
-- [ ] Certificato Tailscale generato
+- [ ] Cloudflare API token configurato
+- [ ] Certificati SSL generati (Tailscale + Let's Encrypt)
 - [ ] Firewall configurato
 - [ ] Tutti i container in stato "running"
 

@@ -1,10 +1,11 @@
 [Unit]
-Description=Monthly Tailscale Certificate Renewal Timer
+Description=Monthly SSL Certificate Renewal Timer
 Documentation=https://tailscale.com/kb/1153/enabling-https/
+Documentation=https://certbot.eff.org/
 
 [Timer]
-# Esegue il 1° giorno di ogni mese alle 03:00
-OnCalendar=*-*-01 03:00:00
+# Esegue il 1° e il 15° giorno di ogni mese alle 03:00
+OnCalendar=*-*-01,15 03:00:00
 
 # Esegue immediatamente se l'ultimo run è stato perso
 Persistent=true
