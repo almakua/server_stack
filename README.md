@@ -2,6 +2,8 @@
 
 Stack completo per la gestione automatizzata di media (film, serie TV, musica) con Docker Compose.
 
+> 📖 **Prima installazione?** Segui la [Guida Setup Completa](SETUP.md) per configurare tutto passo-passo.
+
 ---
 
 ## 📋 Panoramica Servizi
