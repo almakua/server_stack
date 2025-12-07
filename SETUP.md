@@ -382,9 +382,15 @@ docker compose logs -f sonarr
 
 > 🔗 `https://qbittorrent.mbianchi.me`
 
+**Prima di accedere**, configura qBittorrent per il reverse proxy:
+
+```bash
+sudo /opt/aragorn/scripts/configure-qbittorrent.sh
+```
+
 | # | Azione |
 |---|--------|
-| 1 | Accedi con **username:** `admin` **password:** (dai log) |
+| 1 | Accedi con **username:** `admin` **password:** (mostrata dallo script) |
 | 2 | **Tools → Options → Web UI** |
 |   | ↳ Cambia la password |
 | 3 | **Tools → Options → Downloads** |

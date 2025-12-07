@@ -67,6 +67,7 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
 ./scripts/
 ├── renew-certs.sh              # Rinnovo certificati (Tailscale + Let's Encrypt)
 ├── install-systemd.sh          # Installazione servizi systemd
+├── configure-qbittorrent.sh    # Configurazione qBittorrent per reverse proxy
 ├── cloudflare.ini.example      # Template credenziali Cloudflare
 └── systemd/
     ├── cert-renewal.service
