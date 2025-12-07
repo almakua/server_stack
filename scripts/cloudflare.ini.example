@@ -17,7 +17,7 @@ dns_cloudflare_api_token = YOUR_CLOUDFLARE_API_TOKEN
 #    sudo cp cloudflare.ini.example /etc/letsencrypt/cloudflare.ini
 #
 # 2. Modifica con il tuo token:
-#    sudo nano /etc/letsencrypt/cloudflare.ini
+#    sudo vim /etc/letsencrypt/cloudflare.ini
 #
 # 3. Imposta permessi restrittivi:
 #    sudo chmod 600 /etc/letsencrypt/cloudflare.ini

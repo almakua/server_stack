@@ -407,7 +407,7 @@ sudo apt install certbot python3-certbot-dns-cloudflare
 sudo cp /etc/letsencrypt/cloudflare.ini.example /etc/letsencrypt/cloudflare.ini
 
 # Modifica con il tuo token
-sudo nano /etc/letsencrypt/cloudflare.ini
+sudo vim /etc/letsencrypt/cloudflare.ini
 # Inserisci: dns_cloudflare_api_token = IL_TUO_TOKEN
 
 # Imposta permessi restrittivi

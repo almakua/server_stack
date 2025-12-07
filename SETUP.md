@@ -115,7 +115,7 @@ docker run --rm --gpus all nvidia/cuda:12.0.0-base-ubuntu18.04 nvidia-smi
 lspci | grep -i nvidia
 
 # Modifica sources.list
-sudo nano /etc/apt/sources.list
+sudo vim /etc/apt/sources.list
 ```
 
 Assicurati che le righe contengano `non-free non-free-firmware`:
@@ -126,7 +126,7 @@ deb http://deb.debian.org/debian trixie-updates main contrib non-free non-free-f
 deb http://security.debian.org/debian-security trixie-security main contrib non-free non-free-firmware
 ```
 
-Salva ed esci (`Ctrl+O`, `Enter`, `Ctrl+X`)
+Salva ed esci (`:wq`)
 
 #### Step 2: Installa driver NVIDIA
 
@@ -265,7 +265,7 @@ sudo tailscale up
 ```bash
 # Crea file credenziali
 sudo mkdir -p /etc/letsencrypt
-sudo nano /etc/letsencrypt/cloudflare.ini
+sudo vim /etc/letsencrypt/cloudflare.ini
 ```
 
 Inserisci:
