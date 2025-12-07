@@ -1,0 +1,171 @@
+version: "3.8"
+
+services:
+  # ============================================
+  # qBittorrent - Download Client
+  # ============================================
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Rome
+      - WEBUI_PORT=8080
+    volumes:
+      - /mnt/secondary/containers/qbittorrent:/config
+      - /mnt/main/downloads:/downloads
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
+
+  # ============================================
+  # Prowlarr - Indexer Manager
+  # ============================================
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Rome
+    volumes:
+      - /mnt/secondary/containers/prowlarr:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+
+  # ============================================
+  # Sonarr - TV Shows Management
+  # ============================================
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Rome
+    volumes:
+      - /mnt/secondary/containers/sonarr:/config
+      - /mnt/main/series:/tv
+      - /mnt/main/downloads:/downloads
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  # ============================================
+  # Radarr - Movies Management
+  # ============================================
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Rome
+    volumes:
+      - /mnt/secondary/containers/radarr:/config
+      - /mnt/main/movies:/movies
+      - /mnt/main/downloads:/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+  # ============================================
+  # Lidarr - Music Management
+  # ============================================
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    container_name: lidarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Rome
+    volumes:
+      - /mnt/secondary/containers/lidarr:/config
+      - /mnt/main/music:/music
+      - /mnt/main/downloads:/downloads
+    ports:
+      - 8686:8686
+    restart: unless-stopped
+
+  # ============================================
+  # Bazarr - Subtitles Management
+  # ============================================
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Rome
+    volumes:
+      - /mnt/secondary/containers/bazarr:/config
+      - /mnt/main/movies:/movies
+      - /mnt/main/series:/tv
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+
+  # ============================================
+  # Jellyfin - Media Server
+  # ============================================
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Rome
+    volumes:
+      - /mnt/secondary/containers/jellyfin:/config
+      - /mnt/main/movies:/data/movies
+      - /mnt/main/series:/data/tvshows
+      - /mnt/main/music:/data/music
+    ports:
+      - 8096:8096
+      - 8920:8920 # HTTPS
+      - 7359:7359/udp # Discovery
+      - 1900:1900/udp # DLNA
+    restart: unless-stopped
+
+  # ============================================
+  # Watchtower - Auto-update Containers
+  # ============================================
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    environment:
+      - TZ=Europe/Rome
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_SCHEDULE=0 0 4 * * * # Every day at 4:00 AM
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
+  # ============================================
+  # Nginx - Reverse Proxy
+  # ============================================
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - /mnt/secondary/containers/nginx/ssl:/etc/nginx/ssl:ro
+      - /mnt/secondary/containers/nginx/logs:/var/log/nginx
+    depends_on:
+      - qbittorrent
+      - prowlarr
+      - sonarr
+      - radarr
+      - lidarr
+      - bazarr
+      - jellyfin
+    restart: unless-stopped
+
