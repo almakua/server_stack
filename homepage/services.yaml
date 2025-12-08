@@ -6,7 +6,7 @@
         description: DNS & Ad Blocker
         widget:
           type: pihole
-          url: http://127.0.0.1:8089
+          url: http://172.20.0.1:8089
 
 - Media:
     - Jellyfin:
