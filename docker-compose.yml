@@ -190,11 +190,11 @@ services:
     network_mode: host
     environment:
       - TZ=Europe/Rome
-      - WEBPASSWORD=${PIHOLE_WEBPASSWORD:-admin}
-      - DNSMASQ_LISTENING=all
-      - PIHOLE_DNS_=1.1.1.1;1.0.0.1
-      - DNSSEC=true
-      - WEB_PORT=8089
+      - FTLCONF_webserver_port=8089
+      - FTLCONF_webserver_api_password=${PIHOLE_WEBPASSWORD:-admin}
+      - FTLCONF_dns_listeningMode=all
+      - FTLCONF_dns_upstreams=1.1.1.1;1.0.0.1
+      - FTLCONF_dns_dnssec=true
       - VIRTUAL_HOST=pihole.mbianchi.me,pihole.mb.home
     volumes:
       - /mnt/secondary/containers/pihole/etc-pihole:/etc/pihole
