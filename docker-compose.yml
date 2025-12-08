@@ -169,6 +169,7 @@ services:
       - HOMEPAGE_VAR_RADARR_API_KEY=${HOMEPAGE_VAR_RADARR_API_KEY:-}
       - HOMEPAGE_VAR_LIDARR_API_KEY=${HOMEPAGE_VAR_LIDARR_API_KEY:-}
       - HOMEPAGE_VAR_BAZARR_API_KEY=${HOMEPAGE_VAR_BAZARR_API_KEY:-}
+      - HOMEPAGE_VAR_PIHOLE_API_KEY=${HOMEPAGE_VAR_PIHOLE_API_KEY:-}
     volumes:
       - ./homepage:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
