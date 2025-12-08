@@ -53,13 +53,20 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
 ./nginx/
 ├── nginx.conf              # Configurazione principale
 └── conf.d/
-    ├── qbittorrent.conf    # *.mbianchi.me
+    ├── qbittorrent.conf    # *.mbianchi.me (HTTPS pubblico)
     ├── prowlarr.conf
     ├── sonarr.conf
     ├── radarr.conf
     ├── lidarr.conf
     ├── bazarr.conf
-    └── jellyfin.conf
+    ├── jellyfin.conf
+    ├── local-qbittorrent.conf   # *.casa.local (HTTP locale)
+    ├── local-prowlarr.conf
+    ├── local-sonarr.conf
+    ├── local-radarr.conf
+    ├── local-lidarr.conf
+    ├── local-bazarr.conf
+    └── local-jellyfin.conf
 ```
 
 ### Script
@@ -297,6 +304,8 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 
 ### URL Servizi
 
+#### Pubblici (HTTPS)
+
 | Servizio | URL |
 |----------|-----|
 | qBittorrent | `https://qbittorrent.mbianchi.me` |
@@ -308,6 +317,20 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 | Jellyfin | `https://jellyfin.mbianchi.me` |
 
 > HTTP viene automaticamente reindirizzato a HTTPS
+
+#### Rete Locale (HTTP)
+
+| Servizio | URL |
+|----------|-----|
+| qBittorrent | `http://qbittorrent.casa.local` |
+| Prowlarr | `http://prowlarr.casa.local` |
+| Sonarr | `http://sonarr.casa.local` |
+| Radarr | `http://radarr.casa.local` |
+| Lidarr | `http://lidarr.casa.local` |
+| Bazarr | `http://bazarr.casa.local` |
+| Jellyfin | `http://jellyfin.casa.local` |
+
+> Richiede configurazione DNS locale (Pi-hole, router, /etc/hosts)
 
 ### Configurazione DNS
 
