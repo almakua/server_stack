@@ -1,0 +1,84 @@
+---
+- Media:
+    - Jellyfin:
+        icon: jellyfin.svg
+        href: https://jellyfin.mbianchi.me
+        description: Media Server
+        server: docker
+        container: jellyfin
+        widget:
+          type: jellyfin
+          url: http://jellyfin:8096
+          key: "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}"
+          enableBlocks: true
+          enableNowPlaying: true
+
+- Download:
+    - qBittorrent:
+        icon: qbittorrent.svg
+        href: https://qbittorrent.mbianchi.me
+        description: Torrent Client
+        server: docker
+        container: qbittorrent
+        widget:
+          type: qbittorrent
+          url: http://qbittorrent:8080
+          username: admin
+          password: "{{HOMEPAGE_VAR_QBITTORRENT_PASSWORD}}"
+
+    - Prowlarr:
+        icon: prowlarr.svg
+        href: https://prowlarr.mbianchi.me
+        description: Indexer Manager
+        server: docker
+        container: prowlarr
+        widget:
+          type: prowlarr
+          url: http://prowlarr:9696
+          key: "{{HOMEPAGE_VAR_PROWLARR_API_KEY}}"
+
+- Management:
+    - Sonarr:
+        icon: sonarr.svg
+        href: https://sonarr.mbianchi.me
+        description: TV Shows
+        server: docker
+        container: sonarr
+        widget:
+          type: sonarr
+          url: http://sonarr:8989
+          key: "{{HOMEPAGE_VAR_SONARR_API_KEY}}"
+
+    - Radarr:
+        icon: radarr.svg
+        href: https://radarr.mbianchi.me
+        description: Movies
+        server: docker
+        container: radarr
+        widget:
+          type: radarr
+          url: http://radarr:7878
+          key: "{{HOMEPAGE_VAR_RADARR_API_KEY}}"
+
+    - Lidarr:
+        icon: lidarr.svg
+        href: https://lidarr.mbianchi.me
+        description: Music
+        server: docker
+        container: lidarr
+        widget:
+          type: lidarr
+          url: http://lidarr:8686
+          key: "{{HOMEPAGE_VAR_LIDARR_API_KEY}}"
+
+    - Bazarr:
+        icon: bazarr.svg
+        href: https://bazarr.mbianchi.me
+        description: Subtitles
+        server: docker
+        container: bazarr
+        widget:
+          type: bazarr
+          url: http://bazarr:6767
+          key: "{{HOMEPAGE_VAR_BAZARR_API_KEY}}"
+

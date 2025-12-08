@@ -10,6 +10,7 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
 
 | Servizio | Porta | URL | Descrizione |
 |----------|-------|-----|-------------|
+| **Homepage** | `3000` | `homepage.mbianchi.me` | Dashboard con widget |
 | **qBittorrent** | `8080` | `qbittorrent.mbianchi.me` | Client BitTorrent con WebUI |
 | **Prowlarr** | `9696` | `prowlarr.mbianchi.me` | Gestione centralizzata degli indexer |
 | **Sonarr** | `8989` | `sonarr.mbianchi.me` | Gestione automatica serie TV |
@@ -53,20 +54,33 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
 ./nginx/
 ├── nginx.conf              # Configurazione principale
 └── conf.d/
-    ├── qbittorrent.conf    # *.mbianchi.me (HTTPS pubblico)
+    ├── homepage.conf       # *.mbianchi.me (HTTPS pubblico)
+    ├── qbittorrent.conf
     ├── prowlarr.conf
     ├── sonarr.conf
     ├── radarr.conf
     ├── lidarr.conf
     ├── bazarr.conf
     ├── jellyfin.conf
-    ├── local-qbittorrent.conf   # *.mb.home (HTTP locale)
+    ├── local-homepage.conf      # *.mb.home (HTTP locale)
+    ├── local-qbittorrent.conf
     ├── local-prowlarr.conf
     ├── local-sonarr.conf
     ├── local-radarr.conf
     ├── local-lidarr.conf
     ├── local-bazarr.conf
     └── local-jellyfin.conf
+```
+
+### Homepage Dashboard
+```
+./homepage/
+├── settings.yaml       # Configurazione generale
+├── services.yaml       # Servizi e widget
+├── widgets.yaml        # Widget globali
+├── docker.yaml         # Connessione Docker
+├── bookmarks.yaml      # Link rapidi
+└── env.example         # Template variabili API
 ```
 
 ### Script
@@ -201,7 +215,35 @@ docker compose ps
 4. **Settings → Providers**: aggiungi provider sottotitoli (es. OpenSubtitles, Addic7ed)
 5. **Settings → Languages**: configura le lingue desiderate (es. Italian, English)
 
-### 7️⃣ Jellyfin (Media Server)
+### 7️⃣ Homepage (Dashboard)
+
+1. Accedi a `https://homepage.mbianchi.me`
+2. La dashboard mostra automaticamente tutti i servizi
+3. **Per abilitare i widget**, configura le API key:
+
+```bash
+cd ~/aragorn
+cp homepage/env.example .env
+vim .env
+```
+
+Inserisci le API key:
+```ini
+HOMEPAGE_VAR_JELLYFIN_API_KEY=...      # Dashboard → API Keys → Add
+HOMEPAGE_VAR_QBITTORRENT_PASSWORD=...   # La tua password qBittorrent
+HOMEPAGE_VAR_PROWLARR_API_KEY=...       # Settings → General → API Key
+HOMEPAGE_VAR_SONARR_API_KEY=...         # Settings → General → API Key
+HOMEPAGE_VAR_RADARR_API_KEY=...         # Settings → General → API Key
+HOMEPAGE_VAR_LIDARR_API_KEY=...         # Settings → General → API Key
+HOMEPAGE_VAR_BAZARR_API_KEY=...         # Settings → General → API Key
+```
+
+Poi riavvia:
+```bash
+docker compose up -d homepage
+```
+
+### 8️⃣ Jellyfin (Media Server)
 
 1. Accedi a `http://localhost:8096`
 2. Completa il wizard iniziale
@@ -308,6 +350,7 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 
 | Servizio | URL |
 |----------|-----|
+| Homepage | `https://homepage.mbianchi.me` |
 | qBittorrent | `https://qbittorrent.mbianchi.me` |
 | Prowlarr | `https://prowlarr.mbianchi.me` |
 | Sonarr | `https://sonarr.mbianchi.me` |
@@ -322,6 +365,7 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 
 | Servizio | URL |
 |----------|-----|
+| Homepage | `http://homepage.mb.home` |
 | qBittorrent | `http://qbittorrent.mb.home` |
 | Prowlarr | `http://prowlarr.mb.home` |
 | Sonarr | `http://sonarr.mb.home` |

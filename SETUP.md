@@ -366,6 +366,7 @@ docker compose logs -f sonarr
 
 | Servizio | URL |
 |----------|-----|
+| Homepage | `https://homepage.mbianchi.me` |
 | qBittorrent | `https://qbittorrent.mbianchi.me` |
 | Prowlarr | `https://prowlarr.mbianchi.me` |
 | Sonarr | `https://sonarr.mbianchi.me` |
@@ -375,6 +376,25 @@ docker compose logs -f sonarr
 | Jellyfin | `https://jellyfin.mbianchi.me` |
 
 > HTTP viene automaticamente reindirizzato a HTTPS
+
+---
+
+### 0️⃣ Homepage (Dashboard)
+
+> 🔗 `https://homepage.mbianchi.me`
+
+La dashboard è già funzionante. Per abilitare i widget con statistiche live:
+
+```bash
+cd ~/aragorn
+cp homepage/env.example .env
+vim .env
+```
+
+Inserisci le API key dopo aver configurato gli altri servizi, poi:
+```bash
+docker compose up -d homepage
+```
 
 ---
 

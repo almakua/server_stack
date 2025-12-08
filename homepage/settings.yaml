@@ -1,0 +1,17 @@
+---
+title: Aragorn Media Server
+favicon: https://jellyfin.org/images/favicon.ico
+theme: dark
+color: slate
+headerStyle: boxed
+layout:
+  Media:
+    style: row
+    columns: 4
+  Download:
+    style: row
+    columns: 3
+  Management:
+    style: row
+    columns: 3
+
