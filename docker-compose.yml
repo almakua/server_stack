@@ -137,9 +137,9 @@ services:
       - /mnt/main/series:/data/tvshows
       - /mnt/main/music:/data/music
     ports:
-      # Solo porte discovery/DLNA esposte (per app locali)
-      - 7359:7359/udp # Discovery
-      - 1900:1900/udp # DLNA
+      - 8096:8096       # WebUI HTTP
+      - 7359:7359/udp   # Discovery
+      - 1900:1900/udp   # DLNA
     networks:
       - mediastack
     runtime: nvidia
