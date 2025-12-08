@@ -11,6 +11,7 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
 | Servizio | Porta | URL | Descrizione |
 |----------|-------|-----|-------------|
 | **Homepage** | `3000` | `homepage.mbianchi.me` | Dashboard con widget |
+| **Pi-hole** | `53/80` | `pihole.mbianchi.me` | DNS Server & Ad Blocker |
 | **qBittorrent** | `8080` | `qbittorrent.mbianchi.me` | Client BitTorrent con WebUI |
 | **Prowlarr** | `9696` | `prowlarr.mbianchi.me` | Gestione centralizzata degli indexer |
 | **Sonarr** | `8989` | `sonarr.mbianchi.me` | Gestione automatica serie TV |
@@ -55,6 +56,7 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
 ├── nginx.conf              # Configurazione principale
 └── conf.d/
     ├── homepage.conf       # *.mbianchi.me (HTTPS pubblico)
+    ├── pihole.conf
     ├── qbittorrent.conf
     ├── prowlarr.conf
     ├── sonarr.conf
@@ -63,6 +65,7 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
     ├── bazarr.conf
     ├── jellyfin.conf
     ├── local-homepage.conf      # *.mb.home (HTTP locale)
+    ├── local-pihole.conf
     ├── local-qbittorrent.conf
     ├── local-prowlarr.conf
     ├── local-sonarr.conf
@@ -243,7 +246,54 @@ Poi riavvia:
 docker compose up -d homepage
 ```
 
-### 8️⃣ Jellyfin (Media Server)
+### 8️⃣ Pi-hole (DNS & Ad Blocker)
+
+1. Accedi a `https://pihole.mbianchi.me/admin`
+2. **Password di default**: `admin` (o quella impostata in `.env`)
+3. Cambia la password: **Settings → Change Web Interface Password**
+
+#### Configurazione DNS locale
+
+Per usare Pi-hole come DNS server, configura i tuoi dispositivi o router per usare l'IP del server come DNS.
+
+```bash
+# Esempio: imposta DNS su Linux
+sudo vim /etc/resolv.conf
+nameserver IP_DEL_SERVER
+```
+
+#### Password personalizzata
+
+Aggiungi al file `.env`:
+```bash
+PIHOLE_WEBPASSWORD=la_tua_password_sicura
+```
+
+Poi riavvia:
+```bash
+docker compose up -d pihole
+```
+
+#### DNS Records Locali
+
+In Pi-hole puoi aggiungere record DNS locali per `*.mb.home`:
+
+1. Vai in **Local DNS → DNS Records**
+2. Aggiungi i record:
+
+| Domain | IP |
+|--------|-----|
+| `homepage.mb.home` | `IP_SERVER` |
+| `pihole.mb.home` | `IP_SERVER` |
+| `qbittorrent.mb.home` | `IP_SERVER` |
+| `sonarr.mb.home` | `IP_SERVER` |
+| `radarr.mb.home` | `IP_SERVER` |
+| `lidarr.mb.home` | `IP_SERVER` |
+| `bazarr.mb.home` | `IP_SERVER` |
+| `prowlarr.mb.home` | `IP_SERVER` |
+| `jellyfin.mb.home` | `IP_SERVER` |
+
+### 9️⃣ Jellyfin (Media Server)
 
 1. Accedi a `http://localhost:8096`
 2. Completa il wizard iniziale
@@ -351,6 +401,7 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 | Servizio | URL |
 |----------|-----|
 | Homepage | `https://homepage.mbianchi.me` |
+| Pi-hole | `https://pihole.mbianchi.me/admin` |
 | qBittorrent | `https://qbittorrent.mbianchi.me` |
 | Prowlarr | `https://prowlarr.mbianchi.me` |
 | Sonarr | `https://sonarr.mbianchi.me` |
@@ -366,6 +417,7 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 | Servizio | URL |
 |----------|-----|
 | Homepage | `http://homepage.mb.home` |
+| Pi-hole | `http://pihole.mb.home/admin` |
 | qBittorrent | `http://qbittorrent.mb.home` |
 | Prowlarr | `http://prowlarr.mb.home` |
 | Sonarr | `http://sonarr.mb.home` |

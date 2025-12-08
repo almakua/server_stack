@@ -1,4 +1,15 @@
 ---
+- Infrastructure:
+    - Pi-hole:
+        icon: pi-hole.svg
+        href: https://pihole.mbianchi.me/admin
+        description: DNS & Ad Blocker
+        server: docker
+        container: pihole
+        widget:
+          type: pihole
+          url: http://pihole
+
 - Media:
     - Jellyfin:
         icon: jellyfin.svg

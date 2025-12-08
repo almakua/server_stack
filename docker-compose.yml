@@ -178,6 +178,32 @@ services:
     restart: unless-stopped
 
   # ============================================
+  # Pi-hole - DNS & Ad Blocker
+  # ============================================
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    hostname: pihole
+    environment:
+      - TZ=Europe/Rome
+      - WEBPASSWORD=${PIHOLE_WEBPASSWORD:-admin}
+      - DNSMASQ_LISTENING=all
+      - PIHOLE_DNS_=1.1.1.1;1.0.0.1
+      - DNSSEC=true
+      - VIRTUAL_HOST=pihole.mbianchi.me,pihole.mb.home
+    volumes:
+      - /mnt/secondary/containers/pihole/etc-pihole:/etc/pihole
+      - /mnt/secondary/containers/pihole/etc-dnsmasq.d:/etc/dnsmasq.d
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    networks:
+      - mediastack
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+
+  # ============================================
   # Watchtower - Auto-update Containers
   # ============================================
   watchtower:
@@ -218,5 +244,6 @@ services:
       - bazarr
       - jellyfin
       - homepage
+      - pihole
     restart: unless-stopped
 

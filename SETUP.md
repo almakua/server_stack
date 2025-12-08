@@ -367,6 +367,7 @@ docker compose logs -f sonarr
 | Servizio | URL |
 |----------|-----|
 | Homepage | `https://homepage.mbianchi.me` |
+| Pi-hole | `https://pihole.mbianchi.me/admin` |
 | qBittorrent | `https://qbittorrent.mbianchi.me` |
 | Prowlarr | `https://prowlarr.mbianchi.me` |
 | Sonarr | `https://sonarr.mbianchi.me` |
@@ -398,7 +399,40 @@ docker compose up -d homepage
 
 ---
 
-### 1️⃣ qBittorrent
+### 1️⃣ Pi-hole (DNS & Ad Blocker)
+
+> 🔗 `https://pihole.mbianchi.me/admin`
+
+| # | Azione |
+|---|--------|
+| 1 | Accedi con password `admin` (o quella nel file `.env`) |
+| 2 | **Settings → Change Web Interface Password** → Cambia password |
+| 3 | **Local DNS → DNS Records** → Aggiungi i record per `*.mb.home` |
+
+**Crea le cartelle di configurazione:**
+```bash
+mkdir -p /mnt/secondary/containers/pihole/{etc-pihole,etc-dnsmasq.d}
+```
+
+**Aggiungi questi record DNS:**
+
+| Domain | IP (sostituisci con il tuo) |
+|--------|-----|
+| `homepage.mb.home` | `192.168.1.X` |
+| `pihole.mb.home` | `192.168.1.X` |
+| `qbittorrent.mb.home` | `192.168.1.X` |
+| `sonarr.mb.home` | `192.168.1.X` |
+| `radarr.mb.home` | `192.168.1.X` |
+| `lidarr.mb.home` | `192.168.1.X` |
+| `bazarr.mb.home` | `192.168.1.X` |
+| `prowlarr.mb.home` | `192.168.1.X` |
+| `jellyfin.mb.home` | `192.168.1.X` |
+
+**Configura i dispositivi** per usare l'IP del server come DNS primario.
+
+---
+
+### 2️⃣ qBittorrent
 
 > 🔗 `https://qbittorrent.mbianchi.me`
 
@@ -421,7 +455,7 @@ sudo /opt/aragorn/scripts/configure-qbittorrent.sh
 
 ---
 
-### 2️⃣ Prowlarr
+### 3️⃣ Prowlarr
 
 > 🔗 `https://prowlarr.mbianchi.me`
 
@@ -436,7 +470,7 @@ sudo /opt/aragorn/scripts/configure-qbittorrent.sh
 
 ---
 
-### 3️⃣ Sonarr (Serie TV)
+### 4️⃣ Sonarr (Serie TV)
 
 > 🔗 `https://sonarr.mbianchi.me`
 
@@ -464,7 +498,7 @@ sudo /opt/aragorn/scripts/configure-qbittorrent.sh
 
 ---
 
-### 4️⃣ Radarr (Film)
+### 5️⃣ Radarr (Film)
 
 > 🔗 `https://radarr.mbianchi.me`
 
@@ -492,7 +526,7 @@ sudo /opt/aragorn/scripts/configure-qbittorrent.sh
 
 ---
 
-### 5️⃣ Lidarr (Musica)
+### 6️⃣ Lidarr (Musica)
 
 > 🔗 `https://lidarr.mbianchi.me`
 
@@ -520,7 +554,7 @@ sudo /opt/aragorn/scripts/configure-qbittorrent.sh
 
 ---
 
-### 6️⃣ Bazarr (Sottotitoli)
+### 7️⃣ Bazarr (Sottotitoli)
 
 > 🔗 `https://bazarr.mbianchi.me`
 
