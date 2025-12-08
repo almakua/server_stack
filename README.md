@@ -60,7 +60,7 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
     ├── lidarr.conf
     ├── bazarr.conf
     ├── jellyfin.conf
-    ├── local-qbittorrent.conf   # *.casa.local (HTTP locale)
+    ├── local-qbittorrent.conf   # *.mb.home (HTTP locale)
     ├── local-prowlarr.conf
     ├── local-sonarr.conf
     ├── local-radarr.conf
@@ -322,13 +322,13 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 
 | Servizio | URL |
 |----------|-----|
-| qBittorrent | `http://qbittorrent.casa.local` |
-| Prowlarr | `http://prowlarr.casa.local` |
-| Sonarr | `http://sonarr.casa.local` |
-| Radarr | `http://radarr.casa.local` |
-| Lidarr | `http://lidarr.casa.local` |
-| Bazarr | `http://bazarr.casa.local` |
-| Jellyfin | `http://jellyfin.casa.local` |
+| qBittorrent | `http://qbittorrent.mb.home` |
+| Prowlarr | `http://prowlarr.mb.home` |
+| Sonarr | `http://sonarr.mb.home` |
+| Radarr | `http://radarr.mb.home` |
+| Lidarr | `http://lidarr.mb.home` |
+| Bazarr | `http://bazarr.mb.home` |
+| Jellyfin | `http://jellyfin.mb.home` |
 
 > Richiede configurazione DNS locale (Pi-hole, router, /etc/hosts)
 
