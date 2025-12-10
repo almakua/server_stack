@@ -11,6 +11,17 @@
           url: http://uptime-kuma:3001
           slug: default
 
+    - Portainer:
+        icon: portainer.svg
+        href: https://portainer.mbianchi.me
+        description: Container Management
+        server: docker
+        container: portainer
+        widget:
+          type: portainer
+          url: http://portainer:9000
+          env: 1
+
     - ntfy:
         icon: ntfy.svg
         href: https://ntfy.mbianchi.me

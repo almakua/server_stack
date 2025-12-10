@@ -367,6 +367,7 @@ docker compose logs -f sonarr
 | Servizio | URL |
 |----------|-----|
 | Homepage | `https://homepage.mbianchi.me` |
+| Portainer | `https://portainer.mbianchi.me` |
 | Uptime Kuma | `https://status.mbianchi.me` |
 | ntfy | `https://ntfy.mbianchi.me` |
 | Pi-hole | `https://pihole.mbianchi.me/admin` |
@@ -422,6 +423,7 @@ mkdir -p /mnt/secondary/containers/pihole/{etc-pihole,etc-dnsmasq.d}
 | Domain | IP (sostituisci con il tuo) |
 |--------|-----|
 | `homepage.mb.home` | `192.168.1.X` |
+| `portainer.mb.home` | `192.168.1.X` |
 | `pihole.mb.home` | `192.168.1.X` |
 | `qbittorrent.mb.home` | `192.168.1.X` |
 | `sonarr.mb.home` | `192.168.1.X` |
@@ -586,7 +588,28 @@ sudo /opt/aragorn/scripts/configure-qbittorrent.sh
 
 ---
 
-### 7️⃣ Jellyfin (Media Server)
+### 7️⃣ Portainer (Container Management)
+
+> 🔗 `https://portainer.mbianchi.me`
+
+| # | Azione |
+|---|--------|
+| 1 | **Primo accesso:** Crea utente admin |
+|   | ↳ Username: `admin` |
+|   | ↳ Password: (minimo 12 caratteri) |
+| 2 | Clicca **"Get Started"** per connettere Docker locale |
+| 3 | Portainer mostrerà automaticamente tutti i container |
+
+#### Funzionalità principali:
+- **Containers**: Avvia/ferma/riavvia, visualizza log, accesso shell
+- **Images**: Pull nuove immagini, rimuovi quelle inutilizzate
+- **Volumes**: Gestisci volumi Docker
+- **Networks**: Visualizza e gestisci reti Docker
+- **Stacks**: Deploy di docker-compose dall'interfaccia web
+
+---
+
+### 8️⃣ Jellyfin (Media Server)
 
 > 🔗 `https://jellyfin.mbianchi.me`
 
@@ -647,6 +670,7 @@ docker compose logs prowlarr | grep -i "sync\|app" | tail -10
 ### Test da Browser
 
 Apri questi URL e verifica che rispondano con HTTPS:
+- `https://portainer.mbianchi.me`
 - `https://qbittorrent.mbianchi.me`
 - `https://sonarr.mbianchi.me`
 - `https://radarr.mbianchi.me`
@@ -668,6 +692,7 @@ Apri questi URL e verifica che rispondano con HTTPS:
 - [ ] Tutti i container in stato "running"
 
 ### Servizi
+- [ ] Portainer: utente admin creato
 - [ ] qBittorrent: password cambiata
 - [ ] Prowlarr: indexer configurati
 - [ ] Sonarr: root folder + download client

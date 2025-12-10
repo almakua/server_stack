@@ -11,6 +11,7 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
 | Servizio | Porta | URL | Descrizione |
 |----------|-------|-----|-------------|
 | **Homepage** | `3000` | `homepage.mbianchi.me` | Dashboard con widget |
+| **Portainer** | `9000` | `portainer.mbianchi.me` | Gestione container Docker |
 | **Uptime Kuma** | `3001` | `status.mbianchi.me` | Monitoraggio uptime servizi |
 | **ntfy** | `80` | `ntfy.mbianchi.me` | Push Notifications |
 | **Pi-hole** | `53/80` | `pihole.mbianchi.me` | DNS Server & Ad Blocker |
@@ -59,6 +60,7 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
 ├── nginx.conf              # Configurazione principale
 └── conf.d/
     ├── homepage.conf       # *.mbianchi.me (HTTPS pubblico)
+    ├── portainer.conf
     ├── pihole.conf
     ├── qbittorrent.conf
     ├── prowlarr.conf
@@ -68,6 +70,7 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
     ├── bazarr.conf
     ├── jellyfin.conf
     ├── local-homepage.conf      # *.mb.home (HTTP locale)
+    ├── local-portainer.conf
     ├── local-pihole.conf
     ├── local-qbittorrent.conf
     ├── local-prowlarr.conf
@@ -287,6 +290,7 @@ In Pi-hole puoi aggiungere record DNS locali per `*.mb.home`:
 | Domain | IP |
 |--------|-----|
 | `homepage.mb.home` | `IP_SERVER` |
+| `portainer.mb.home` | `IP_SERVER` |
 | `pihole.mb.home` | `IP_SERVER` |
 | `qbittorrent.mb.home` | `IP_SERVER` |
 | `sonarr.mb.home` | `IP_SERVER` |
@@ -296,7 +300,23 @@ In Pi-hole puoi aggiungere record DNS locali per `*.mb.home`:
 | `prowlarr.mb.home` | `IP_SERVER` |
 | `jellyfin.mb.home` | `IP_SERVER` |
 
-### 9️⃣ Jellyfin (Media Server)
+### 9️⃣ Portainer (Container Management)
+
+1. Accedi a `https://portainer.mbianchi.me`
+2. **Prima configurazione**: crea un utente admin
+   - Username: `admin`
+   - Password: (minimo 12 caratteri)
+3. Seleziona **"Get Started"** per connettere l'ambiente Docker locale
+4. Portainer rileverà automaticamente tutti i container in esecuzione
+
+#### Funzionalità principali:
+- **Dashboard**: panoramica di container, immagini, volumi, network
+- **Containers**: start/stop/restart, logs, console shell
+- **Images**: pull, build, gestione
+- **Stacks**: deploy di docker-compose direttamente dall'interfaccia
+- **Registries**: connessione a Docker Hub e registry privati
+
+### 🔟 Jellyfin (Media Server)
 
 1. Accedi a `http://localhost:8096`
 2. Completa il wizard iniziale
@@ -390,6 +410,7 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 | 6767 | Bazarr | TCP |
 | 8096 | Jellyfin HTTP | TCP |
 | 8920 | Jellyfin HTTPS | TCP |
+| 9000 | Portainer | TCP |
 | 7359 | Jellyfin Discovery | UDP |
 | 1900 | Jellyfin DLNA | UDP |
 
@@ -404,6 +425,7 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 | Servizio | URL |
 |----------|-----|
 | Homepage | `https://homepage.mbianchi.me` |
+| Portainer | `https://portainer.mbianchi.me` |
 | Uptime Kuma | `https://status.mbianchi.me` |
 | ntfy | `https://ntfy.mbianchi.me` |
 | Pi-hole | `https://pihole.mbianchi.me/admin` |
@@ -423,6 +445,7 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 | Servizio | URL |
 |----------|-----|
 | Homepage | `http://homepage.mb.home` |
+| Portainer | `http://portainer.mb.home` |
 | Uptime Kuma | `http://status.mb.home` |
 | ntfy | `http://ntfy.mb.home` |
 | Pi-hole | `http://pihole.mb.home/admin` |
@@ -744,6 +767,7 @@ Questo stack utilizza solo software open source:
 - [Jellyfin](https://jellyfin.org/) - GPL-2.0
 - [Watchtower](https://containrrr.dev/watchtower/) - Apache-2.0
 - [Nginx](https://nginx.org/) - BSD-2-Clause
+- [Portainer](https://www.portainer.io/) - Zlib License
 
 ---
 
