@@ -19,6 +19,7 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
 | **Lidarr** | `8686` | `lidarr.mbianchi.me` | Gestione automatica musica |
 | **Bazarr** | `6767` | `bazarr.mbianchi.me` | Download automatico sottotitoli |
 | **Jellyfin** | `8096` | `jellyfin.mbianchi.me` | Media server per lo streaming |
+| **Jellyseerr** | `5055` | `jellyseerr.mbianchi.me` | Gestione richieste media |
 | **Nginx** | `80/443` | - | Reverse proxy |
 | **Watchtower** | - | - | Aggiornamento automatico container |
 
@@ -409,6 +410,7 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 | Lidarr | `https://lidarr.mbianchi.me` |
 | Bazarr | `https://bazarr.mbianchi.me` |
 | Jellyfin | `https://jellyfin.mbianchi.me` |
+| Jellyseerr | `https://jellyseerr.mbianchi.me` |
 
 > HTTP viene automaticamente reindirizzato a HTTPS
 
@@ -425,6 +427,7 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 | Lidarr | `http://lidarr.mb.home` |
 | Bazarr | `http://bazarr.mb.home` |
 | Jellyfin | `http://jellyfin.mb.home` |
+| Jellyseerr | `http://jellyseerr.mb.home` |
 
 > Richiede configurazione DNS locale (Pi-hole, router, /etc/hosts)
 

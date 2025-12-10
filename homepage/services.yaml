@@ -7,6 +7,17 @@
         ping: http://172.20.0.1:8089
 
 - Media:
+    - Jellyseerr:
+        icon: jellyseerr.svg
+        href: https://jellyseerr.mbianchi.me
+        description: Media Requests
+        server: docker
+        container: jellyseerr
+        widget:
+          type: jellyseerr
+          url: http://jellyseerr:5055
+          key: "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}"
+
     - Jellyfin:
         icon: jellyfin.svg
         href: https://jellyfin.mbianchi.me

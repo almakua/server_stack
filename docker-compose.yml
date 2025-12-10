@@ -152,6 +152,22 @@ services:
     restart: unless-stopped
 
   # ============================================
+  # Jellyseerr - Media Request Management
+  # ============================================
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Rome
+    volumes:
+      - /mnt/secondary/containers/jellyseerr:/app/config
+    networks:
+      - mediastack
+    restart: unless-stopped
+
+  # ============================================
   # Homepage - Dashboard
   # ============================================
   homepage:
@@ -170,6 +186,7 @@ services:
       - HOMEPAGE_VAR_LIDARR_API_KEY=${HOMEPAGE_VAR_LIDARR_API_KEY:-}
       - HOMEPAGE_VAR_BAZARR_API_KEY=${HOMEPAGE_VAR_BAZARR_API_KEY:-}
       - HOMEPAGE_VAR_PIHOLE_API_KEY=${HOMEPAGE_VAR_PIHOLE_API_KEY:-}
+      - HOMEPAGE_VAR_JELLYSEERR_API_KEY=${HOMEPAGE_VAR_JELLYSEERR_API_KEY:-}
     volumes:
       - ./homepage:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro

@@ -375,6 +375,7 @@ docker compose logs -f sonarr
 | Lidarr | `https://lidarr.mbianchi.me` |
 | Bazarr | `https://bazarr.mbianchi.me` |
 | Jellyfin | `https://jellyfin.mbianchi.me` |
+| Jellyseerr | `https://jellyseerr.mbianchi.me` |
 
 > HTTP viene automaticamente reindirizzato a HTTPS
 
