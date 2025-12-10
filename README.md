@@ -11,6 +11,7 @@ Stack completo per la gestione automatizzata di media (film, serie TV, musica) c
 | Servizio | Porta | URL | Descrizione |
 |----------|-------|-----|-------------|
 | **Homepage** | `3000` | `homepage.mbianchi.me` | Dashboard con widget |
+| **Uptime Kuma** | `3001` | `status.mbianchi.me` | Monitoraggio uptime servizi |
 | **Pi-hole** | `53/80` | `pihole.mbianchi.me` | DNS Server & Ad Blocker |
 | **qBittorrent** | `8080` | `qbittorrent.mbianchi.me` | Client BitTorrent con WebUI |
 | **Prowlarr** | `9696` | `prowlarr.mbianchi.me` | Gestione centralizzata degli indexer |
@@ -402,6 +403,7 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 | Servizio | URL |
 |----------|-----|
 | Homepage | `https://homepage.mbianchi.me` |
+| Uptime Kuma | `https://status.mbianchi.me` |
 | Pi-hole | `https://pihole.mbianchi.me/admin` |
 | qBittorrent | `https://qbittorrent.mbianchi.me` |
 | Prowlarr | `https://prowlarr.mbianchi.me` |
@@ -419,6 +421,7 @@ Formato cron: `secondi minuti ore giorno mese giorno_settimana`
 | Servizio | URL |
 |----------|-----|
 | Homepage | `http://homepage.mb.home` |
+| Uptime Kuma | `http://status.mb.home` |
 | Pi-hole | `http://pihole.mb.home/admin` |
 | qBittorrent | `http://qbittorrent.mb.home` |
 | Prowlarr | `http://prowlarr.mb.home` |

@@ -168,6 +168,18 @@ services:
     restart: unless-stopped
 
   # ============================================
+  # Uptime Kuma - Status Monitoring
+  # ============================================
+  uptime-kuma:
+    image: louislam/uptime-kuma:latest
+    container_name: uptime-kuma
+    volumes:
+      - /mnt/secondary/containers/uptime-kuma:/app/data
+    networks:
+      - mediastack
+    restart: unless-stopped
+
+  # ============================================
   # Homepage - Dashboard
   # ============================================
   homepage:

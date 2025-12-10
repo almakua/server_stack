@@ -367,6 +367,7 @@ docker compose logs -f sonarr
 | Servizio | URL |
 |----------|-----|
 | Homepage | `https://homepage.mbianchi.me` |
+| Uptime Kuma | `https://status.mbianchi.me` |
 | Pi-hole | `https://pihole.mbianchi.me/admin` |
 | qBittorrent | `https://qbittorrent.mbianchi.me` |
 | Prowlarr | `https://prowlarr.mbianchi.me` |

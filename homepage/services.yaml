@@ -1,5 +1,16 @@
 ---
 - Infrastructure:
+    - Uptime Kuma:
+        icon: uptime-kuma.svg
+        href: https://status.mbianchi.me
+        description: Status Monitoring
+        server: docker
+        container: uptime-kuma
+        widget:
+          type: uptimekuma
+          url: http://uptime-kuma:3001
+          slug: default
+
     - Pi-hole:
         icon: pi-hole.svg
         href: https://pihole.mbianchi.me/admin
