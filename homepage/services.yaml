@@ -11,6 +11,13 @@
           url: http://uptime-kuma:3001
           slug: default
 
+    - ntfy:
+        icon: ntfy.svg
+        href: https://ntfy.mbianchi.me
+        description: Push Notifications
+        server: docker
+        container: ntfy
+
     - Pi-hole:
         icon: pi-hole.svg
         href: https://pihole.mbianchi.me/admin

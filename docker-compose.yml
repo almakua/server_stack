@@ -168,6 +168,30 @@ services:
     restart: unless-stopped
 
   # ============================================
+  # ntfy - Push Notifications
+  # ============================================
+  ntfy:
+    image: binwiederhier/ntfy:latest
+    container_name: ntfy
+    command:
+      - serve
+    environment:
+      - TZ=Europe/Rome
+      - NTFY_BASE_URL=https://ntfy.mbianchi.me
+      - NTFY_UPSTREAM_BASE_URL=https://ntfy.sh
+      - NTFY_CACHE_FILE=/var/cache/ntfy/cache.db
+      - NTFY_AUTH_FILE=/var/lib/ntfy/auth.db
+      - NTFY_AUTH_DEFAULT_ACCESS=deny-all
+      - NTFY_BEHIND_PROXY=true
+      - NTFY_ENABLE_LOGIN=true
+    volumes:
+      - /mnt/secondary/containers/ntfy/cache:/var/cache/ntfy
+      - /mnt/secondary/containers/ntfy/lib:/var/lib/ntfy
+    networks:
+      - mediastack
+    restart: unless-stopped
+
+  # ============================================
   # Uptime Kuma - Status Monitoring
   # ============================================
   uptime-kuma:
