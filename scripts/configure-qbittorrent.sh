@@ -3,6 +3,11 @@
 # Configura qBittorrent per funzionare dietro reverse proxy
 #
 
+# Assicurati che lo script venga eseguito con bash
+if [ -z "$BASH_VERSION" ]; then
+    exec /bin/bash "$0" "$@"
+fi
+
 set -euo pipefail
 
 QBIT_CONFIG="/mnt/secondary/containers/qbittorrent/qBittorrent/qBittorrent.conf"
@@ -12,13 +17,13 @@ echo "Configurazione qBittorrent per Reverse Proxy"
 echo "=========================================="
 
 # Verifica root
-if [[ $EUID -ne 0 ]]; then
+if [ "$(id -u)" -ne 0 ]; then
     echo "Errore: Questo script deve essere eseguito come root"
     exit 1
 fi
 
 # Verifica che il file esista
-if [[ ! -f "$QBIT_CONFIG" ]]; then
+if [ ! -f "$QBIT_CONFIG" ]; then
     echo "Errore: File di configurazione non trovato: $QBIT_CONFIG"
     echo "Assicurati che qBittorrent sia stato avviato almeno una volta."
     exit 1
@@ -26,7 +31,12 @@ fi
 
 # Ferma qBittorrent
 echo "[1/4] Fermando qBittorrent..."
-cd /opt/aragorn 2>/dev/null || cd ~/aragorn
+# Cerca il docker-compose.yml nella directory corrente o nelle directory genitore
+SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$SCRIPT_DIR" 2>/dev/null || cd "$(dirname "$0")/.." || {
+    echo "Errore: Impossibile trovare la directory del progetto"
+    exit 1
+}
 docker compose stop qbittorrent
 
 # Backup config
