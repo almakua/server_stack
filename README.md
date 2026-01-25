@@ -730,13 +730,28 @@ docker compose restart qbittorrent
 
 4. **Verifica i log se il problema persiste**:
 ```bash
-docker compose logs nginx | tail -50
+# Log nginx (cerca errori 503)
+docker compose logs nginx | grep -i "503\|error" | tail -50
+
+# Log qBittorrent
 docker compose logs qbittorrent | tail -50
+
+# Test connessione diretta al container
+docker compose exec nginx wget -O- http://qbittorrent:8080/api/v2/app/version
+```
+
+5. **Verifica che il container qBittorrent sia in esecuzione**:
+```bash
+docker compose ps qbittorrent
 ```
 
 Il problema è solitamente causato da:
 - qBittorrent non configurato per il reverse proxy (CSRF Protection, Host Header Validation)
+- Rate limiting nginx che blocca le richieste API frequenti
 - Buffering nginx che interferisce con le richieste API in tempo reale
+- Container qBittorrent non raggiungibile dalla rete Docker
+
+**Nota:** La configurazione nginx include una location `/api/` dedicata senza rate limiting per evitare errori 503 sulle richieste API.
 
 ### Jellyfin: accelerazione hardware NVIDIA
 
