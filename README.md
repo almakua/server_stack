@@ -712,6 +712,8 @@ Se ricevi un errore 503 quando qBittorrent cerca di caricare la lista dei torren
 1. **Configura qBittorrent per il reverse proxy** (se non già fatto):
 ```bash
 cd /path/to/server_stack
+sudo bash ./scripts/configure-qbittorrent.sh
+# oppure, se lo script è eseguibile:
 sudo ./scripts/configure-qbittorrent.sh
 ```
 
