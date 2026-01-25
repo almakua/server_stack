@@ -706,6 +706,36 @@ docker compose start qbittorrent
 docker logs qbittorrent 2>&1 | grep -i password
 ```
 
+### qBittorrent: errore 503 quando carica la lista torrent
+Se ricevi un errore 503 quando qBittorrent cerca di caricare la lista dei torrent tramite reverse proxy:
+
+1. **Configura qBittorrent per il reverse proxy** (se non già fatto):
+```bash
+cd /path/to/server_stack
+sudo ./scripts/configure-qbittorrent.sh
+```
+
+2. **Ricarica la configurazione nginx**:
+```bash
+docker compose exec nginx nginx -t  # Verifica sintassi
+docker compose exec nginx nginx -s reload  # Ricarica configurazione
+```
+
+3. **Riavvia qBittorrent**:
+```bash
+docker compose restart qbittorrent
+```
+
+4. **Verifica i log se il problema persiste**:
+```bash
+docker compose logs nginx | tail -50
+docker compose logs qbittorrent | tail -50
+```
+
+Il problema è solitamente causato da:
+- qBittorrent non configurato per il reverse proxy (CSRF Protection, Host Header Validation)
+- Buffering nginx che interferisce con le richieste API in tempo reale
+
 ### Jellyfin: accelerazione hardware NVIDIA
 
 Il docker-compose è già configurato per NVIDIA GPU. Prerequisiti sul sistema host:
