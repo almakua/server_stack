@@ -317,3 +317,35 @@ services:
       - portainer
     restart: unless-stopped
 
+  ollama:
+    volumes:
+      - /mnt/secondary/containers/ollama:/root/.ollama
+    container_name: ollama
+    pull_policy: always
+    tty: true
+    restart: unless-stopped
+    image: ollama/ollama:latest
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  open-webui:
+    extends:
+      file: docker-compose.yaml
+      service: ollama
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    volumes:
+      - /mnt/secondary/containers/open-webui:/app/backend/data
+    depends_on:
+      - ollama
+    environment:
+      - 'OLLAMA_BASE_URL=http://ollama:11434'
+      - 'WEBUI_SECRET_KEY=asparago'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
