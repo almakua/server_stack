@@ -36,16 +36,6 @@
         description: DNS & Ad Blocker
         ping: http://172.20.0.1:8089
 
-- AI:
-    -  OpenWebUi:
-        icon: openwebui.svg
-        href: https://ai.mbianchi.me
-        description: AI Chatbot
-        server: docker
-        container: open-webui
-        widget:
-          type: open-ebui
-          url: http://open-webui:8080
 - Media:
     - Jellyseerr:
         icon: jellyseerr.svg
